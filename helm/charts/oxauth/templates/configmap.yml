@@ -24,3 +24,13 @@ data:
   GLUU_COUCHBASE_PASSWORD_FILE: {{ .Values.global.gluuCouchBasePassFile | quote }}
   {{- end }}
   
+---
+
+apiVersion: v1
+data:
+  casa.json: ""
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: {{ include "oxauth.name" . }}-casacm
+  

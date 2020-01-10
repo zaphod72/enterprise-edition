@@ -10,9 +10,6 @@ spec:
         app: {{ template "gluu.name" . }}-load
     spec:
       volumes:
-        - name: {{ template "gluu.name" . }}-config
-          persistentVolumeClaim:
-            claimName: {{ include "config.fullname" . }}
         - name: {{ include "config.fullname" . }}-mount-gen-file
           configMap:
             name: {{ include "config.fullname" . }}-gen-json-file
@@ -23,8 +20,6 @@ spec:
       - name: {{ template "gluu.name" . }}-load
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         volumeMounts:
-          - mountPath: /opt/config-init/db/
-            name: {{ template "gluu.name" . }}-config
           - mountPath: /opt/config-init/db/generate.json
             name: {{ include "config.fullname" . }}-mount-gen-file
             subPath: generate.json

@@ -43,15 +43,19 @@ spec:
           - configMapRef:
               name: {{ include "radius.fullname" . }}
         volumeMounts:
-          - mountPath: /opt/gluu/radius/logs
-            name: radius-logs
+          - name: cb-pass
+            mountPath: "/etc/gluu/conf/couchbase_password"
+            subPath: couchbase_password
+          - name: cb-cert
+            mountPath: "/etc/certs/couchbase.crt"
+            subPath: couchbase.crt
         livenessProbe:
           exec:
             command:
             - cat
             - /tmp/gluu-radius-health
           initialDelaySeconds: 30
-          periodDelaySeconds: 30 
+          periodSeconds: 30 
           failureThreshold: 20
         readinessProbe:
           exec:
@@ -59,29 +63,19 @@ spec:
             - cat
             - /etc/gluu-radius-health
           initialDelaySeconds: 25
-          periodDelaySeconds: 25
+          periodSeconds: 25
           failureThreshold: 20
       {{- if eq .Values.global.isDomainRegistered "false"}}
       hostAliases:
         - ip: {{ .Values.global.nginxIp }}
-          hostname:
+          hostnames:
             - {{ .Values.global.domain }} 
       {{- end }}
       volumes:
-      - name: radius-logs
-        persistentVolumeClaim:
-          claimName: {{ include "radius.fullname" . }}
-        resources:
-{{ toYaml .Values.resources | indent 10 }}
-    {{- with .Values.nodeSelector }}
-      nodeSelector:
-{{ toYaml . | indent 6 }}
-    {{- end }}
-    {{- with .Values.affinity }}
-      affinity:
-{{ toYaml . | indent 6 }}
-    {{- end }}
-    {{- with .Values.tolerations }}
-      tolerations:
-{{ toYaml . | indent 6 }}
-    {{- end }}
+      - name: cb-pass 
+        secret:
+          secretName: {{ include "radius.name" . }}-cb-pass
+      - name: cb-cert 
+        secret: 
+          secretName: {{ include "radius.name" . }}-cb-cert 
+

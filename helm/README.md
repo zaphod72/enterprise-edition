@@ -15,7 +15,7 @@ It also packages other components/services that makeup Gluu Server.
 
 - Kubernetes 1.+ 
 - PV provisioner support in the underlying infrastructure
-- Helm 
+- Helm 3
 
 ### Instructions to set up Helm in a kubernetes cluster.
 1. To install kubernetes follow the official guide found at [kubernetes](https://kubernetes.io/docs/setup/).  
@@ -84,7 +84,7 @@ If during installation the release was not defined, release name is checked by r
 | `global.key-rotation.enabled`        | Allow key rotation                                         | `false`                             |
 | `global.cr-rotate.enabled`           | Allow cache rotation deployment                            | `false`                             |
 | `global.radius.enabled`              | Enabled radius installation                                | `false`                             |
-| `global.rbac.enabled`                | Enable/disable tiller RBAC in the cluster. it should be disabled when deploying to cloud  | `true` |
+| `global.rbac.enabled`                | Enable/disable RBAC in the cluster. it should be disabled when deploying to cloud  | `true` |
 | `global.redis.enabled`               | Whether to allow installation of redis chart.              | `false`                             |
 | `global.shared-shib.enabled`         | Allow installation of shared volumes. They are shared between `oxtrust` and `oxshibboleth` services. | `true`                             |
 | `global.oxtrust.enabled`             | Allow installation of oxtrust                              |  `true`                             |
@@ -135,9 +135,6 @@ To get the `encodedCouchbaseCrt` certificate used to authenticate to couchbase s
 
    ### Common instructions on all Cloud providers (Both AWS and GKE)
     - Change `global.provisioner` value in `values.yaml` to `kubernetes.io/gce-pd` 
-    - Enabling RBAC in the cluster before deploying the chart. This has to be done first.  
-      To do this deploy the `tiller.yaml` file   
-      `$ kubectl apply -f tiller.yaml`
     - Enable cloud deployment in `global.cloud.enabled` by setting it to `true`.
     - Disable `rbac` sub-chart installation. Instructions can be found in the config table above.  
       `rbac.enabled: false`
@@ -157,7 +154,7 @@ To get the `encodedCouchbaseCrt` certificate used to authenticate to couchbase s
 
   #### Important
 
-  Get the `loadBalancerIP` or external IP. Wait till the loadBalancer is provisioned and get the IP address by running.  
+  Get the `loadBalancerIP` or external IP. Wait untill the loadBalancer is provisioned and get the IP address by running.  
       `kubectl get svc <release-name>-nginx-ingress-controller --output jsonpath='{.status.loadBalancer.ingress[0].ip}'`
 
   - Map the IP address with a domain name. One can check out this article [here](https://medium.com/@kungusamuel90/custom-domain-name-mapping-for-k8s-on-gcp-4dc263b2dabe) as a reference guide.

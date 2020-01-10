@@ -58,23 +58,29 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}          
           volumeMounts:
-            - name: {{ include "casa.name" . }}
+            - name: casa
               mountPath: /etc/gluu/conf
               subPath: casa.json
-            - name: {{ include "casa.name" . }}-pass
+            - name: cb-pass
               mountPath: "/etc/gluu/conf/couchbase_password"
               subPath: couchbase_password
-            - name: {{ include "casa.name" . }}-cert
+            - name: cb-cert
               mountPath: "/etc/gluu/certs/couchbase.crt"
               subPath: couchbase.crt 
       volumes:
         - name: {{ include "casa.name" . }}
           persistentVolumeClaim: 
+            {{- if and .Values.global.cloud.enabled (eq .Values.global.provisioner "kubernetes.io/aws-ebs") }}
+            claimName: efs
+            {{- else if eq .Values.global.provisioner "kubernetes.io/minikube-hostpath" }}
             claimName: {{ include "casa.fullname" . }}
-        - name: {{ include "casa.name" . }}-pass
+            {{- else }}
+            claimName: nfs
+            {{- end }}
+        - name: cb-pass
           secret:
             secretName: {{ include "casa.name" . }}-pass
-        - name: {{ include "casa.name" . }}-cert
+        - name: cb-cert
           secret:
             secretName: {{ include "casa.name" . }}-cert
       {{- if eq .Values.global.isDomainRegistered "false"}}

@@ -19,10 +19,6 @@ spec:
         app: {{ include "oxd-server.name" . }}
         release: {{ .Release.Name }}
     spec:
-      volumes:
-        - name: {{ include "oxd-server.name" . }}
-          persistentVolumwGame:
-            claimName: {{ include "oxd-server.fullname" . }}
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -64,17 +60,4 @@ spec:
           hostnames:
             - {{ .Values.global.domain }}
       {{- end }}
-          resources:
-{{ toYaml .Values.resources | indent 12 }}
-    {{- with .Values.nodeSelector }}
-      nodeSelector:
-{{ toYaml . | indent 8 }}
-    {{- end }}
-    {{- with .Values.affinity }}
-      affinity:
-{{ toYaml . | indent 8 }}
-    {{- end }}
-    {{- with .Values.tolerations }}
-      tolerations:
-{{ toYaml . | indent 8 }}
-    {{- end }}
+

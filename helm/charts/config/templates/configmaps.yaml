@@ -4,14 +4,7 @@ metadata:
   name: {{ include "config.fullname" . }}-config-cm
   namespace: {{ .Values.global.namespace }}
 data:
-  ADMIN_PW:  {{ .Values.adminPass }}
-  EMAIL: {{ .Values.email }}
-  ORG_NAME: {{ .Values.orgName }}
-  COUNTRY_CODE: {{ .Values.countryCode }}
-  STATE: {{ .Values.state }}
-  CITY: {{ .Values.city }}
-  LDAP_TYPE: {{ .Values.ldapType }}
-  DOMAIN: {{ .Values.global.domain }}
+  GLUU_CACHE_TYPE: {{ .Values.global.gluuCacheType }}
   GLUU_CONFIG_ADAPTER: {{ .Values.global.configAdapterName }}
   GLUU_SECRET_ADAPTER: {{ .Values.global.configSecretAdapter }}
 

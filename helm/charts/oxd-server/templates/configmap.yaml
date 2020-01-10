@@ -44,4 +44,8 @@ data:
   DEFAULT_SITE_CONFIG_UI_LOCALES: "['en']"
   DEFAULT_SITE_CONFIG_CLAIMS_LOCALES: "['en']"
   DEFAULT_SITE_CONFIG_CONTACTS: "[]"
-  LB_ADDR: {{ .Values.global.lbAddr | quote }}
+  {{- if and (and .Values.global.cloud.enabled (eq .Values.global.isDomainRegistered "false") ) (eq .Values.global.provisioner "kubernetes.io/aws-ebs") }}
+  LB_ADDR: {{ .Values.global.lbAddr }}
+  {{- end }}
+
+  

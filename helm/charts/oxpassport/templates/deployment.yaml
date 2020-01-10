@@ -38,11 +38,17 @@ spec:
         envFrom:
           - configMapRef:
               name: {{ include "oxpassport.name" . }}
-        {{- if and (and .Values.global.cloud.enabled (eq .Values.global.isDomainRegistered "false") ) (eq .Values.global.provisioner "kubernetes.io/aws-ebs") }}
         volumeMounts:
+        {{- if and (and .Values.global.cloud.enabled (eq .Values.global.isDomainRegistered "false") ) (eq .Values.global.provisioner "kubernetes.io/aws-ebs") }}
           - name: {{ include "oxpassport.name" . }}-updatelbip
             mountPath: /scripts
         {{- end }}
+          - name: cb-pass
+            mountPath: "/etc/gluu/conf/couchbase_password"
+            subPath: couchbase_password
+          - name: cb-cert
+            mountPath: "/etc/certs/couchbase.crt"
+            subPath: couchbase.crt
         livenessProbe:
           httpGet:
             path: /passport/token
@@ -57,23 +63,15 @@ spec:
           initialDelaySeconds: 25
           periodSeconds: 25
           failureThreshold: 20
-      {{- if and (and .Values.global.cloud.enabled (eq .Values.global.isDomainRegistered "false") ) (eq .Values.global.provisioner "kubernetes.io/aws-ebs") }}
       volumes:
+        {{- if and (and .Values.global.cloud.enabled (eq .Values.global.isDomainRegistered "false") ) (eq .Values.global.provisioner "kubernetes.io/aws-ebs") }}
         - name: {{ include "oxpassport.name" . }}-updatelbip
           configMap:
             name: {{ .Release.Name }}-updatelbip
-      {{- end }}
-          resources:
-{{ toYaml .Values.resources | indent 12 }}
-    {{- with .Values.nodeSelector }}
-      nodeSelector:
-{{ toYaml . | indent 8 }}
-    {{- end }}
-    {{- with .Values.affinity }}
-      affinity:
-{{ toYaml . | indent 8 }}
-    {{- end }}
-    {{- with .Values.tolerations }}
-      tolerations:
-{{ toYaml . | indent 8 }}
-    {{- end }}
+        {{- end }}
+        - name: cb-pass
+          secret:
+            secretName: {{ include "oxpassport.name" . }}-cb-pass
+        - name: cb-cert 
+          secret: 
+            secretName: {{ include "oxpassport.name" . }}-cb-cert 
