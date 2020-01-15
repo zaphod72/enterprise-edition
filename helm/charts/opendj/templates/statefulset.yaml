@@ -45,8 +45,7 @@ spec:
   - metadata:
       name: opendj-volume
     spec:
-      storageClassName: ""
-      volumeName: {{ include "opendj.fullname" .}}
+      storageClassName: {{ include "opendj.fullname" . }}
       accessModes:
       - {{ .Values.persistence.accessModes }}
       resources:

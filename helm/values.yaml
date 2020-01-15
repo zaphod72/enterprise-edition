@@ -5,8 +5,10 @@ global:
     enabled: false
     # provisioner: kubernetes.io/aws-ebs
 
-  # values used to define the StorageClass template
-  provisioner: kubernetes.io/minikube-hostpath # kubernetes.io/aws-ebs 
+  # values used to define the StorageClass template 
+
+  # kubernetes.io/gce-pd, k8s.io/minikube-hostpath, kubernetes.io/aws-ebs and kubernetes.io/azure-disk
+  provisioner: k8s.io/minikube-hostpath # kubernetes.io/aws-ebs 
   encrypted: true
   pool: default
   fsType: ext4
