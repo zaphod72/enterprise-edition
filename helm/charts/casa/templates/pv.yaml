@@ -10,5 +10,5 @@ spec:
   accessModes:
     - {{ .Values.persistence.accessModes }}
   hostPath:
-    path: "/etc/gluu/conf"
+    path: "/data/casa"
     type: DirectoryOrCreate

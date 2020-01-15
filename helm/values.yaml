@@ -90,7 +90,7 @@ global:
     enabled: false
 
   oxd-server:
-    enabled: false  
+    enabled: false   
 
   # redis should be enabled only when cacheType is REDIS
   redis:

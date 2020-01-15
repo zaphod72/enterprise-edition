@@ -306,6 +306,10 @@ oxd-server:
 
 If one doesn't have a key store it must be generated and place to the variable mentioned above. To generate, find the instructions [here](https://stackoverflow.com/questions/3997748/how-can-i-create-a-keystore)
 
+### Casa
+
+Casa requires `OXD-SERVER` to function well. One should make sure `oxd-server` has been enabled - as described above - if one intends to use casa.
+
 ### Redis
 
 To enable usage of Redis, change the following values.
