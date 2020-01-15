@@ -3,8 +3,7 @@ apiVersion: v1
 metadata:
   name: {{ include "casa.fullname" .}}
 spec:
-  storageClassName: ""
-  volumeName: {{ include "casa.fullname" . }}
+  storageClassName: {{ include "casa.fullname" . }}
   accessModes: 
     - {{ .Values.persistence.accessModes }}
   resources:
